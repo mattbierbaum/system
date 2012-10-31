@@ -17,9 +17,9 @@ replace() {
 
 # a safe makedir
 makedir() {
-    if [ ! -d ${1} ]
+    if [ ! -d ${HOME}/${1} ]
     then
-        mkdir -p ${1}
+        mkdir -p ${HOME}/${1}
     fi
 }
 
