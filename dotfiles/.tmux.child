@@ -1,2 +1,3 @@
 set -g prefix C-b
 unbind C-a
+unbind C-p
