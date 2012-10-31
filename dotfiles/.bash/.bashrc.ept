@@ -1,0 +1,18 @@
+export KIM_DIR=/b/bierbaum/openkim-api/
+export KIM_DYNAMIC=yes
+
+export PYTHONPATH=/b/bierbaum/openkim-pipeline:$HOME/lib/python2.7/site-packages:/usr/local/pub/enthought
+export PATH=/opt/cuda3.2/bin:/usr/local/pub/enthought/bin:/usr/local/pub/bin:$PATH
+
+alias money='/usr/common/bin/money'
+
+export ENTBODY=/b/bierbaum/entbody
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/cuda3.2/lib64:/opt/cuda4.2/lib64
+
+# MeshGenC++ environment settings
+export MESHGENCPP="/b/bierbaum/builds/meshgencpp/util"
+export QHULL="/b/bierbaum/builds/qhull-2012.1/"
+export PYTHONPATH="/b/bierbaum/builds/meshgencpp/util/viz/python:${PYTHONPATH}:/b/bierbaum/cuda-plasticity"
+export MATLABPATH="/b/bierbaum/builds/meshgencpp/util/viz/matlab:${MATLABPATH}"
+alias plotmesh2="python $MESHGENCPP/viz/python/plotmesh2.py"
+export MESHGENCPP=/b/bierbaum/builds/meshgencpp

@@ -1,0 +1,3 @@
+export ENTBODY=$HOME/projects/entbody/
+export PYTHONPATH=${PYTHONPATH}:$HOME/projects/cuda-plasticity
+
