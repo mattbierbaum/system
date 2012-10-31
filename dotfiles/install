@@ -1,0 +1,55 @@
+#!/bin/bash
+
+HERE=`pwd`
+HOST=`hostname`
+BACKUPDIR=${HOME}/.dotfiles.bk__`date +%F_\%T`
+
+# replaces a given file with a link to the new one
+replace() {
+    # Force create/replace the symlink.
+    TARGET=${HOME}/${2}
+    if [ -f $TARGET ]
+    then
+        mv $TARGET ${BACKUPDIR}
+    fi
+    ln -fs "${HERE}/${1}" "${HOME}/${2}"
+}
+
+# a safe makedir
+makedir() {
+    if [ ! -d ${1} ]
+    then
+        mkdir -p ${1}
+    fi
+}
+
+mirrorfiles() {
+    makedir "${BACKUPDIR}"
+    makedir ".tmux"
+
+    link "bash/bashrc"          ".bashrc"
+    link "tmux/tmux.conf"       ".tmux.conf"
+    link "tmux/tmux.child"      ".tmux/.tmux.child"
+    link "tmux/tmux.child2"     ".tmux/.tmux.child2"
+    link "tmux/tmux.two"        ".tmux/.tmux.two"
+    link "tmux/tmux.three"      ".tmux/.tmux.three"
+    link "tmux/tmux.usage"      ".tmux/.tmux.usage"
+    link "git/gitconfig"        ".gitconfig"
+    link "git/gitignore"        ".gitignore"
+    link "vim/vimrc"            ".vimrc"
+
+    case $HOST in
+        serenity)
+            link "bash/bashrc.serenity"     ".bashrc.local"
+            ;;
+        dain)
+            link "bash/bashrc.ccmr"         ".bashrc.local"
+            ;;
+        ept)
+            link "bash/bashrc.ccmr"         ".bashrc.local"
+            ;;
+        kempt)
+            link "bash/bashrc.ccmr"         ".bashrc.local"
+            ;;
+    esac
+}

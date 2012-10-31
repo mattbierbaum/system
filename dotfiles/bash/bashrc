@@ -1,0 +1,197 @@
+# If not running interactively, don't do anything
+[ -z "$PS1" ] && return
+
+shopt -s histappend
+shopt -s checkwinsize
+
+HISTSIZE=100000
+HISTFILESIZE=200000
+HISTCONTROL=ignoreboth
+
+# make less more friendly for non-text input files, see lesspipe(1)
+[ -x /usr/bin/lesspipe ] && eval "$(SHELL=/bin/sh lesspipe)"
+
+# set variable identifying the chroot you work in (used in the prompt below)
+if [ -z "$debian_chroot" ] && [ -r /etc/debian_chroot ]; then
+    debian_chroot=$(cat /etc/debian_chroot)
+fi
+
+#color_prompt=yes
+#force_color_prompt=yes
+
+if [ "$color_prompt" = yes ]; then
+    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$ '
+else
+    PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
+fi
+unset color_prompt force_color_prompt
+
+# If this is an xterm set the title to user@host:dir
+PS1="\[\e]0;${debian_chroot:+($debian_chroot)}\u@\h: \w\a\]$PS1"
+
+# enable color support of ls and also add handy aliases
+if [ -x /usr/bin/dircolors ]; then
+    test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
+    alias ls='ls --color=auto'
+    alias grep='grep --color=auto'
+    alias fgrep='fgrep --color=auto'
+    alias egrep='egrep --color=auto'
+fi
+
+# some more ls aliases
+alias ll='ls -alh'
+alias la='ls -A'
+alias l='ls -lh'
+
+# Add an "alert" alias for long running commands.  Use like so:
+#   sleep 10; alert
+alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
+
+if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
+    . /etc/bash_completion
+fi
+
+# Attach to existing tmux session rather than create a new one if possible.
+function tmux {
+    if [[ -n "$*" ]]; then
+        command tmux $*
+    else
+        command tmux attach -d &>/dev/null || command tmux
+    fi
+}
+
+
+# Figure out how many colors we have now.
+hash tput && colors=$(tput colors)
+
+# Save some color codes based on our colour space.
+if [[ $colors -ge 256 ]]; then
+    color_root='\[\e[38;5;9m\]'
+    color_sudo='\[\e[38;5;11m\]'
+    color_user='\[\e[38;5;10m\]'
+    color_norm='\[\e[0m\]'
+elif [[ $colors -ge 8 ]]; then
+    color_root='\[\e[1;31m\]'
+    color_sudo='\[\e[1;33m\]'
+    color_user='\[\e[1;32m\]'
+    color_norm='\[\e[0m\]'
+else
+    color_root=
+    color_sudo=
+    color_user=
+    color_norm=
+fi
+
+# Reset options for ls and grep.
+lsopts=
+grepopts='-I'
+
+# If we have a color terminal, we'll use color for ls and grep.
+if [[ $colors -ge 8 ]]; then
+    hash dircolors &>/dev/null && eval "$(dircolors -b)"
+    if ls --help | grep -- --color &>/dev/null; then
+        lsopts="${lsopts} --color=auto"
+    fi
+    if grep --help | grep -- --color &>/dev/null; then
+        grepopts="${grepopts} --color=auto"
+    fi
+fi
+
+# Set up more options for grep; exclude version control files.
+if grep --help | grep -- --exclude &>/dev/null; then
+    grepopts="${grepopts} --exclude=.git{,ignore,modules}"
+fi
+if grep --help | grep -- --exclude-dir &>/dev/null; then
+    grepopts="${grepopts} --exclude-dir=.{cvs,git,hg,svn}"
+fi
+
+# Decide on color for prompt.
+if [[ $EUID -eq 0 ]]; then
+    color_prompt=${color_root}
+elif [[ -n $SUDO_USER ]]; then
+    color_prompt=${color_sudo}
+else
+    color_prompt=${color_user}
+fi
+
+# Frontend to controlling prompt.
+function prompt {
+    case "$1" in
+
+        # Turn complex coloured prompt on.
+        on) 
+            PROMPT_COMMAND='history -a'
+            PS1='\[\a\][\u@\h:\w]$(prompt return)$(prompt vcs)$(prompt jobs)\$'
+            PS1="${color_prompt}${PS1}${color_norm} "
+            case "$TERM" in
+                screen*) PS1='\[\ek\h\e\\\]'${PS1};;
+                xterm*) PS1='\[\e]0;\h\a\]'${PS1};;
+                rxvt*) PS1='\[\e]2;\h\a\]'${PS1};;
+            esac
+            ;;
+
+        # Revert to simple inexpensive prompt.
+        off)
+            PROMPT_COMMAND=
+            PS1='\[\a\]\$ '
+            ;;
+
+        # Git prompt function.
+        git)
+            git branch &>/dev/null || return 1
+            HEAD="$(git symbolic-ref HEAD 2>/dev/null)"
+            branch="${HEAD##*/}"
+            [[ -n "$(git status 2>/dev/null | \
+                grep -F 'nothing to commit')" ]] || state="!"
+            printf '(git:%s)' "${branch:-unknown}${state}"
+            ;;
+
+        # Mercurial prompt function.
+        hg)
+            hg branch &>/dev/null || return 1
+            branch="$(hg branch 2>/dev/null)"
+            [[ -n "$(hg status 2>/dev/null)" ]] && state="!"
+            printf '(hg:%s)' "${branch:-unknown}${state}"
+            ;;
+
+        # Subversion prompt function.
+        svn)
+            svn info &>/dev/null || return 1
+            url="$(svn info 2>/dev/null | \
+                awk -F': ' '$1 == "URL" {print $2}')"
+            root="$(svn info 2>/dev/null | \
+                awk -F': ' '$1 == "Repository Root" {print $2}')"
+            branch=${url/$root}
+            branch=${branch#/}
+            branch=${branch#branches/}
+            branch=${branch%%/*}
+            [[ -n "$(svn status 2>/dev/null)" ]] && state="!"
+            printf '(svn:%s)' "${branch:-unknown}${state}"
+            ;;
+
+        # VCS wrapper prompt function.
+        vcs)
+            prompt git || prompt svn || prompt hg
+            ;;
+
+        # Return status prompt function.
+        return)
+            ret=$? 
+            [[ $ret -ne 0 ]] && printf '<%d>' ${ret}
+            ;;
+
+        # Job count prompt function.
+        jobs)
+            [[ -n "$(jobs)" ]] && printf '{%d}' $(jobs | sed -n '$=')
+            ;;
+    esac
+}
+
+export PATH=$PATH:$HOME/bin
+
+#=================================================================
+# standard Matt choices... now we get down to different computers
+#=================================================================
+
+RCEXTRA=${HOME}/.bashrc.local
+[[ -e "$RCEXTRA" ]] && . $RCEXTRA
