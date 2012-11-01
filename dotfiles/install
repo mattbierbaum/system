@@ -40,8 +40,9 @@ mirrorfiles() {
     replace ""                      ".dotfiles"
     backup "bash/bashrc"            ".bashrc"
     backup "tmux/tmux.conf"         ".tmux.conf"
-    backup "tmux/tmux.child"        ".tmux/.tmux.child"
+    backup "tmux/tmux.child1"       ".tmux/.tmux.child1"
     backup "tmux/tmux.child2"       ".tmux/.tmux.child2"
+    backup "tmux/tmux.child3"       ".tmux/.tmux.child3"
     backup "tmux/tmux.two"          ".tmux/.tmux.two"
     backup "tmux/tmux.three"        ".tmux/.tmux.three"
     backup "tmux/tmux.usage"        ".tmux/.tmux.usage"
@@ -71,7 +72,6 @@ mirrorfiles() {
 
 
 # Verify that the user wants to proceed before potentially overwriting files
-echo
 echo "Warning: This may overwrite your existing dotfiles."
 read -p "Continue? (y/n) " -n 1
 echo
