@@ -1,0 +1,4 @@
+#!/bin/bash
+cd ~/Desktop/ut2004/System
+padsp ./ut2004-bin-linux-amd64
+cd -

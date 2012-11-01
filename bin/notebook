@@ -1,0 +1,2 @@
+#!/bin/bash
+ipython notebook --port=5555 --ip=* --pylab=inline
