@@ -2,17 +2,27 @@
 
 HERE=`pwd`
 HOST=`hostname`
-BACKUPDIR=${HOME}/.dotfiles.bk__`date +%F_\%T`
+BACKUPDIR=${HOME}/.dotfiles.bk__`date +%F_\%T | sed s/:/-/g`
 
-# replaces a given file with a link to the new one
-replace() {
-    # Force create/replace the symlink.
+# backups a given file with a link to the new one
+backup() {
+    # Force create/backup the symlink.
     TARGET=${HOME}/${2}
+    LINK=${HERE}/${1}
     if [ -f $TARGET ]
     then
-        mv $TARGET ${BACKUPDIR}
+        cp -arH $TARGET ${BACKUPDIR}
+        rm -rf $TARGET
     fi
-    ln -fs "${HERE}/${1}" "${HOME}/${2}"
+    ln -fs $LINK $TARGET
+}
+
+replace() {
+    # Force create/backup the symlink.
+    TARGET=${HOME}/${2}
+    LINK=${HERE}/${1}
+    [[ -e "$TARGET" ]]  && rm -rf $TARGET
+    ln -fs $LINK $TARGET
 }
 
 # a safe makedir
@@ -24,32 +34,52 @@ makedir() {
 }
 
 mirrorfiles() {
-    makedir "${BACKUPDIR}"
+    mkdir -p ${BACKUPDIR}
     makedir ".tmux"
 
-    link "bash/bashrc"          ".bashrc"
-    link "tmux/tmux.conf"       ".tmux.conf"
-    link "tmux/tmux.child"      ".tmux/.tmux.child"
-    link "tmux/tmux.child2"     ".tmux/.tmux.child2"
-    link "tmux/tmux.two"        ".tmux/.tmux.two"
-    link "tmux/tmux.three"      ".tmux/.tmux.three"
-    link "tmux/tmux.usage"      ".tmux/.tmux.usage"
-    link "git/gitconfig"        ".gitconfig"
-    link "git/gitignore"        ".gitignore"
-    link "vim/vimrc"            ".vimrc"
+    replace ""                      ".dotfiles"
+    backup "bash/bashrc"            ".bashrc"
+    backup "tmux/tmux.conf"         ".tmux.conf"
+    backup "tmux/tmux.child"        ".tmux/.tmux.child"
+    backup "tmux/tmux.child2"       ".tmux/.tmux.child2"
+    backup "tmux/tmux.two"          ".tmux/.tmux.two"
+    backup "tmux/tmux.three"        ".tmux/.tmux.three"
+    backup "tmux/tmux.usage"        ".tmux/.tmux.usage"
+    backup "git/gitconfig"          ".gitconfig"
+    backup "git/gitignore"          ".gitignore"
+    backup "vim/vimrc"              ".vimrc"
 
     case $HOST in
         serenity)
-            link "bash/bashrc.serenity"     ".bashrc.local"
+            backup "bash/bashrc.serenity"      ".bashrc.local"
             ;;
         dain)
-            link "bash/bashrc.ccmr"         ".bashrc.local"
+            backup "bash/bashrc.ccmr"          ".bashrc.local"
             ;;
         ept)
-            link "bash/bashrc.ccmr"         ".bashrc.local"
+            backup "bash/bashrc.ccmr"          ".bashrc.local"
             ;;
         kempt)
-            link "bash/bashrc.ccmr"         ".bashrc.local"
+            backup "bash/bashrc.ccmr"          ".bashrc.local"
+            ;;
+        *)
+            touch ${HERE}/bash/bashrc.$HOST
+            backup "bash/bashrc.$HOST"         ".bashrc.local"
             ;;
     esac
 }
+
+
+# Verify that the user wants to proceed before potentially overwriting files
+echo
+echo "Warning: This may overwrite your existing dotfiles."
+read -p "Continue? (y/n) " -n 1
+echo
+
+if [[ $REPLY =~ ^[Yy]$ ]] ; then
+    mirrorfiles
+    source ${HOME}/.bashrc
+else
+    echo "Aborting..."
+    exit 1
+fi

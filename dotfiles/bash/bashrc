@@ -194,4 +194,7 @@ export PATH=$PATH:$HOME/bin
 #=================================================================
 
 RCEXTRA=${HOME}/.bashrc.local
-[[ -e "$RCEXTRA" ]] && . $RCEXTRA
+if [ -f "$RCEXTRA" ]
+then
+    source $RCEXTRA
+fi
