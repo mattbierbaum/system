@@ -42,6 +42,10 @@ fi
 alias ll='ls -alh'
 alias la='ls -A'
 alias l='ls -lh'
+alias cd.='cd ..'
+alias cd..='cd ../..'
+alias cd...='cd ../../../'
+alias cd....='cd ../../../../'
 
 # Add an "alert" alias for long running commands.  Use like so:
 #   sleep 10; alert
@@ -60,6 +64,13 @@ function tmux {
     fi
 }
 
+lookfor() {
+    find . -exec grep -q "$1" '{}' \; -print 
+}
+
+lookfor_run() {
+    find . -exec grep -q "$1" '{}' \; -print0 | xargs -0 $2
+}
 
 # Figure out how many colors we have now.
 hash tput && colors=$(tput colors)
