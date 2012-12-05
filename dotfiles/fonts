@@ -1,0 +1,4 @@
+#!/bin/bash
+mkdir -p ~/.fonts
+cp fontpatch/*.ttf ~/.fonts/
+fc-cache -vf

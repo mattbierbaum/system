@@ -35,24 +35,21 @@ makedir() {
 
 mirrorfiles() {
     mkdir -p ${BACKUPDIR}
-    makedir ".tmux"
-
-    replace ""                      ".dotfiles"
+    
     backup "bash/bashrc"            ".bashrc"
     backup "tmux/tmux.conf"         ".tmux.conf"
-    backup "tmux/tmux.child1"       ".tmux/.tmux.child1"
-    backup "tmux/tmux.child2"       ".tmux/.tmux.child2"
-    backup "tmux/tmux.child3"       ".tmux/.tmux.child3"
-    backup "tmux/tmux.two"          ".tmux/.tmux.two"
-    backup "tmux/tmux.three"        ".tmux/.tmux.three"
-    backup "tmux/tmux.usage"        ".tmux/.tmux.usage"
+    backup "tmux/tmux"              ".tmux"
     backup "git/gitconfig"          ".gitconfig"
     backup "git/gitignore"          ".gitignore"
     backup "vim/vimrc"              ".vimrc"
+    backup "vim/vim"                ".vim"
+    backup "zsh/oh-my-zsh"          ".oh-my-zsh"
+    backup "zsh/zshrc"              ".zshrc"
 
     case $HOST in
         serenity)
             backup "bash/bashrc.serenity"      ".bashrc.local"
+            backup "zsh/zshrc.serenity"        ".zshrc.local"
             ;;
         dain)
             backup "bash/bashrc.ccmr"          ".bashrc.local"
@@ -65,7 +62,9 @@ mirrorfiles() {
             ;;
         *)
             touch ${HERE}/bash/bashrc.$HOST
+            touch ${HERE}/zsh/zshrc.$HOST
             backup "bash/bashrc.$HOST"         ".bashrc.local"
+            backup "zsh/zshrc.$HOST"           ".zshrc.local"
             ;;
     esac
 }
