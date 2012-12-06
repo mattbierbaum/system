@@ -7,7 +7,7 @@ export TERM="xterm-256color"
 export EDITOR=vim
 export LESS="-R"
 
-plugins=(git command-not-found python pip vagrant completat)
+plugins=(git python pip vagrant)
 source $ZSH/oh-my-zsh.sh
 
 # enable color support of ls and also add handy aliases
@@ -56,6 +56,10 @@ if grep --help | grep -- --exclude-dir &>/dev/null; then
     grepopts="${grepopts} --exclude-dir=.{cvs,git,hg,svn}"
 fi
 
+alias pleasekillme2='echo "please kill me" | espeak -s 80 -p 2 -v +whisper > /dev/null 2>&1'
+alias pleasekillme1='echo "please kill me" | espeak -s 80 -p 2 -v +f1 > /dev/null 2>&1'
+alias pleasekillme0='echo "please kill me" | espeak -s 80 -p 2 > /dev/null 2>&1'
+alias tryingtodie='espeak -s 80 -p 2 "eyem just trying to die" > /dev/null 2>&1'
 
 export PATH=$PATH:$HOME/bin
 
