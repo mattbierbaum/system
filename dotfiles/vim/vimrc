@@ -84,7 +84,7 @@ command Make :!make %<
 
 set encoding=utf-8
 set laststatus=2
-let g:Powerline_symbols = 'fancy'
+"let g:Powerline_symbols = 'fancy'
 let g:Powerline_colorscheme = 'skwp'
 
 syntax on
