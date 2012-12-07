@@ -3,4 +3,5 @@ unbind C-p
 unbind C-a
 
 set -g status-bg black
+set -g window-status-format "#[fg=white,bg=black] #I #W "
 set-option -g status-left "#[fg=white,bg=blue](b) #(whoami)@#(hostname) "
