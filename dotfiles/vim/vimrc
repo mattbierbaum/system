@@ -7,7 +7,13 @@ filetype indent on
 filetype on
 filetype plugin on
 filetype plugin indent on
+
 set ofu=syntaxcomplete#Complete
+"set foldmethod=indent
+"set foldnestmax=5
+"set foldlevel=0
+"map ] za
+"map [ zM
 
 "set nobackup
 "set nowritebackup
@@ -97,17 +103,6 @@ syntax enable
 "colorscheme zenburn
 call togglebg#map("<F12>")
 
-"disable automatic folding
-"let g:pymode_folding = 0
-" Start with the folds all open
-autocmd Syntax python normal zR
-"disable linting on write
-let g:pymode_lint_write = 0
-let g:pymode_lint = 1
-let g:pymode_lint_checker = 'pylint,pyflakes'
-let g:pymode_lint_config = "$HOME/.vim/bundle/python-mode/pylint.ini"
-let g:pymode_lint_hold = 1
-
 "add dictionary
 set dictionary+=/usr/share/dict/words
 
@@ -117,5 +112,3 @@ nnoremap <Left> <C-w>h
 nnoremap <Up> <C-w>k
 nnoremap <Down> <C-w>j
 
-" pydiction file
-" let g:pydiction_location = '~/.vim/bundle/Pydiction/complete-dict' 
