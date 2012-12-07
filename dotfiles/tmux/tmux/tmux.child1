@@ -1,7 +1,7 @@
-set -g prefix C-a
+set -g prefix C-h
 unbind C-b
-unbind C-p
+unbind C-y
 
 set -g status-bg colour235
 set -g window-status-format "#[fg=white,bg=colour235] #I #W "
-set-option -g status-left "#[fg=white,bg=blue](a) #(whoami)@#(hostname) "
+set-option -g status-left "#[fg=white,bg=blue](h) #(whoami)@#(hostname) "

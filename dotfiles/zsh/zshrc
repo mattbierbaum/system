@@ -10,6 +10,8 @@ export LESS="-R"
 plugins=(git python pip vagrant)
 source $ZSH/oh-my-zsh.sh
 
+unsetopt correct_all
+
 # enable color support of ls and also add handy aliases
 if [ -x /usr/bin/dircolors ]; then
     test -r ~/.dircolors && eval "$(dircolors -b ~/.dircolors)" || eval "$(dircolors -b)"
@@ -37,11 +39,11 @@ function tmux {
     fi
 }
 
-colors() {
-    for i in {0..255} ; do
-        printf "\x1b[38;5;${i}mcolour${i}\n"
-    done
-}
+#colors() {
+#    for i in {0..255} ; do
+#        printf "\x1b[38;5;${i}mcolour${i}\n"
+#    done
+#}
 
 lookfor() {
     find . -exec grep -q "$1" '{}' \; -print 
