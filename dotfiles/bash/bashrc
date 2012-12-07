@@ -57,8 +57,9 @@ if [ -f /etc/bash_completion ] && ! shopt -oq posix; then
     . /etc/bash_completion
 fi
 
-# Attach to existing tmux session rather than create a new one if possible.
-function tmux {
+function tl { command tmux list-sessions }   # list the current tmux sessions
+function ta { command tmux attach -d -t $* } # add -d to detach all over users
+function tm {                                # create a new tmux, or auto-attach
     if [[ -n "$*" ]]; then
         command tmux $*
     else
