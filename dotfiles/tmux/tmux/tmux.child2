@@ -3,3 +3,4 @@ unbind C-b
 unbind C-a
 
 set -g status-bg colour254
+set-option -g status-left "#[fg=white,bg=blue](p) #(whoami)@#(hostname) "
