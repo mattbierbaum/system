@@ -77,37 +77,12 @@ lookfor_run() {
     find . -exec grep -q "$1" '{}' \; -print0 | xargs -0 $2
 }
 
-# Figure out how many colors we have now.
-hash tput && colors=$(tput colors)
-
-# Reset options for ls and grep.
-lsopts=
-grepopts='-I'
-
-# If we have a color terminal, we'll use color for ls and grep.
-if [[ $colors -ge 8 ]]; then
-    hash dircolors &>/dev/null && eval "$(dircolors -b)"
-    if ls --help | grep -- --color &>/dev/null; then
-        lsopts="${lsopts} --color=auto"
-    fi
-    if grep --help | grep -- --color &>/dev/null; then
-        grepopts="${grepopts} --color=auto"
-    fi
-fi
-
 # Set up more options for grep; exclude version control files.
 if grep --help | grep -- --exclude &>/dev/null; then
     grepopts="${grepopts} --exclude=.git{,ignore,modules}"
 fi
 if grep --help | grep -- --exclude-dir &>/dev/null; then
     grepopts="${grepopts} --exclude-dir=.{cvs,git,hg,svn}"
-fi
-
-if [ "$TERM" != "dumb" ] 
-then
-    [ -e "$HOME/.dircolors" ] && DIR_COLORS="$HOME/.dircolors"
-    [ -e "$DIR_COLORS" ] || DIR_COLORS=""
-    eval "`dircolors -b $DIR_COLORS`"
 fi
 
 alias pleasekillme2='echo "please kill me" | espeak -s 80 -p 2 -v +whisper > /dev/null 2>&1'
@@ -120,7 +95,6 @@ export PATH=$PATH:$HOME/bin
 #=================================================================
 # standard Matt choices... now we get down to different computers
 #=================================================================
-
 RCEXTRA=${HOME}/.bashrc.local
 if [ -f "$RCEXTRA" ]
 then
