@@ -29,6 +29,7 @@ alias cd.='cd ..'
 alias cd..='cd ../..'
 alias cd...='cd ../../../'
 alias cd....='cd ../../../../'
+alias cds='cd /media/storage'
 
 function tl { command tmux list-sessions }   # list the current tmux sessions
 function ta { command tmux attach -d -t $* } # add -d to detach all over users
@@ -63,6 +64,13 @@ if grep --help | grep -- --exclude &>/dev/null; then
 fi
 if grep --help | grep -- --exclude-dir &>/dev/null; then
     grepopts="${grepopts} --exclude-dir=.{cvs,git,hg,svn}"
+fi
+
+if [ "$TERM" != "dumb" ] 
+then
+    [ -e "$HOME/.dircolors" ] && DIR_COLORS="$HOME/.dircolors"
+    [ -e "$DIR_COLORS" ] || DIR_COLORS=""
+    eval "`dircolors -b $DIR_COLORS`"
 fi
 
 alias pleasekillme2='echo "please kill me" | espeak -s 80 -p 2 -v +whisper > /dev/null 2>&1'

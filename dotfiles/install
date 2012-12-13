@@ -36,6 +36,7 @@ makedir() {
 mirrorfiles() {
     mkdir -p ${BACKUPDIR}
     
+    backup "bash/dircolors"         ".dircolors"
     backup "bash/bashrc"            ".bashrc"
     backup "tmux/tmux.conf"         ".tmux.conf"
     backup "tmux/tmux"              ".tmux"
