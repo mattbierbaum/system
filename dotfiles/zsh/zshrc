@@ -41,11 +41,19 @@ function tm {                                # create a new tmux, or auto-attach
     fi
 }
 
-#colors() {
+#function colors {
 #    for i in {0..255} ; do
 #        printf "\x1b[38;5;${i}mcolour${i}\n"
 #    done
 #}
+
+function isomount {
+    sudo mount -o loop $* /media/iso
+}
+
+function isoumount {
+    sudo umount /media/iso
+}
 
 lookfor() {
     find . -exec grep -q "$1" '{}' \; -print 
