@@ -1,4 +1,12 @@
+NODEDIR=/media/scratch/emscripten/node-v0.10.29-linux-x64/bin/
+EM=/media/scratch/emscripten/emsdk-portable/
+
 export ENTBODY=$HOME/projects/entbody/
 export PYTHONPATH=${PYTHONPATH}:$HOME/projects/cuda-plasticity:$HOME/lib/python2.7/site-packages
 export PATH=${PATH}:/usr/local/cuda-5.0/bin
+#export PATH=/media/scratch/anaconda/bin:${PATH}
 export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/cuda-5.0/lib64:/usr/local/cuda-5.0/lib
+export PATH=$NODEDIR:$EM/emscripten/master:$EM/clang/fastcomp/build_master_64/bin/:${PATH}
+
+alias luajit="luajit-2.0.0-beta9"
+

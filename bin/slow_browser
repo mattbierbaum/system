@@ -1,0 +1,2 @@
+#!/bin/bash
+trickle -s -d 10 -u 10 firefox

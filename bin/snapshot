@@ -1,0 +1,3 @@
+#!/bin/bash
+
+avconv -f video4linux2 -s 1600x1200 -i /dev/video0 -ss 0:0:2 -frames 1 "$1"

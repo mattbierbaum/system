@@ -32,6 +32,7 @@
     co = checkout
     df = diff
     dc = diff --cached
+    dw = diff --word-diff=color
     lg = log -p
     lol = log --graph --decorate --pretty=oneline --abbrev-commit
     lola = log --graph --decorate --pretty=oneline --abbrev-commit --all

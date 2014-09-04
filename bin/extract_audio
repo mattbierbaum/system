@@ -1,0 +1,9 @@
+#!/bin/bash
+
+for vid in "$@"
+do
+    filename=$(basename "$vid")
+    extension="${filename##*.}"
+    filename="${filename%.*}"
+    ffmpeg -i "$vid" -vn -ar 44100 -ac 2 -ab 192k -f mp3 "$filename.mp3"
+done
