@@ -1,4 +1,5 @@
 set nocompatible
+set modeline
 
 call pathogen#infect()
 call pathogen#helptags()
@@ -34,6 +35,19 @@ set hlsearch
 set incsearch
 set history=100
 set scrolloff=3
+
+nnoremap j gj
+nnoremap k gk
+vnoremap j gj
+vnoremap k gk
+nnoremap $ g$
+nnoremap 0 g0
+nnoremap <Down> gj
+nnoremap <Up> gk
+vnoremap <Down> gj
+vnoremap <Up> gk
+inoremap <Down> <C-o>gj
+inoremap <Up> <C-o>gk
 
 " set swap file location
 set backupdir=~/.backup//,/tmp//,.
